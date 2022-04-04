@@ -2,6 +2,7 @@ package main
 
 import (
 	"bytes"
+	"fmt"
 	"html/template"
 	"io/fs"
 	"os"
@@ -10,7 +11,25 @@ import (
 	"time"
 )
 
-func find(root, ext string) []string {
+func getTemplates(delta bool) []string {
+	var templates []string
+	for _, page := range findFileByExtension("./src", ".html") {
+		templates = append(templates, page)
+	}
+
+	if delta {
+		rendered := readHistory()
+		difference := difference(templates, rendered.Done)
+
+		fmt.Println(templates, rendered.Done, difference)
+
+		return difference
+	}
+
+	return templates
+}
+
+func findFileByExtension(root, ext string) []string {
 	var a []string
 	filepath.WalkDir(root, func(s string, d fs.DirEntry, err error) error {
 		errorCheck(err)
@@ -22,7 +41,18 @@ func find(root, ext string) []string {
 	return a
 }
 
-func createFile(path string) {
+func readFile(path string) []byte {
+	dat, err := os.ReadFile(path)
+
+	if err != nil {
+		panic(err)
+	}
+
+	return dat
+}
+
+func renderTemplate(path string) {
+	println("Rending template: ", path)
 	fileName := strings.Replace(path, "src/", "", 1)
 	// srcContent := readFile(path)
 	distContent := new(bytes.Buffer)

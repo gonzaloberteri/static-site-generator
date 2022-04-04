@@ -1,14 +1,17 @@
 package main
 
 func main() {
+	// Find or create history.json
+	createHistory(History{})
+
 	// Find files with .html extension
-	var pages []string
-	for _, page := range find("./src", ".html") {
-		pages = append(pages, page)
-	}
+	pages := getTemplates(true)
 
 	// Render templates
 	for i := 0; i < len(pages); i++ {
-		createFile(pages[i])
+		renderTemplate(pages[i])
 	}
+
+	// Update history.json
+	updateHistory()
 }
