@@ -91,19 +91,27 @@ func compileTypescript(path string) {
 	parts := strings.Split(path, "/")
 	moduleName := parts[1]
 
-	command := "npx swc src/" + moduleName + "/ts/*.ts -o dist/" + moduleName + "/js/index.js"
-	commandParts := strings.Fields(command)
-	writeColor("Compiling Typescript: ", "blue")
-	println(moduleName + "/ts/*.ts")
+	tsFiles := findFileByExtension("./src/"+moduleName, ".ts")
 
-	out, err := exec.Command(commandParts[0], commandParts[1:]...).Output()
+	for index := range tsFiles {
+		filePath := tsFiles[index]
+		fileParts := strings.Split(filePath, "/")
+		fileName := strings.Split(fileParts[len(fileParts)-1], ".")[0]
 
-	if false {
+		command := "npx swc " + filePath + " -o dist/" + moduleName + "/js/" + fileName + ".js"
+		println(command)
+		commandParts := strings.Fields(command)
+		writeColor("Compiling Typescript: ", "blue")
+		println(moduleName + "/ts/index.ts")
+
+		out, err := exec.Command(commandParts[0], commandParts[1:]...).Output()
+
 		println("output: " + string(out))
-	}
 
-	if err != nil {
-		log.Fatal(err)
+		if err != nil {
+			log.Fatal(err)
+		}
+
 	}
 }
 

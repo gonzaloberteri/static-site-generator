@@ -13,7 +13,12 @@
   },
   "minify": true,
   "module": {
-    "type": "commonjs",
-    "noInterop": true
+    "type": "es6",
+
+    // These are defaults.
+    "strict": false,
+    "strictMode": true,
+    "lazy": false,
+    "noInterop": false
   }
 }
