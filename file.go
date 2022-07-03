@@ -14,9 +14,7 @@ import (
 
 func getTemplates(delta bool) []string {
 	var templates []string
-	for _, page := range findFileByExtension("./src", ".html") {
-		templates = append(templates, page)
-	}
+	templates = append(templates, findFileByExtension("./src", ".html")...)
 
 	if delta {
 		rendered := readHistory()
@@ -77,6 +75,12 @@ func renderTemplate(path string) {
 	errorCheck(templateErr)
 
 	os.MkdirAll("./dist/"+fileName, os.ModePerm)
+
+	// for i := 1; i <= 50000; i++ {
+	// 	index := strconv.Itoa(i)
+	// 	fileErr := os.WriteFile("./dist/"+fileName+"/index-"+index+".html", distContent.Bytes(), 0644)
+	// 	errorCheck(fileErr)
+	// }
 
 	fileErr := os.WriteFile("./dist/"+fileName+"/index.html", distContent.Bytes(), 0644)
 	errorCheck(fileErr)

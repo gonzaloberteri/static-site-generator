@@ -25,8 +25,6 @@ func createHistory(update History) {
 	_ = ioutil.WriteFile("history.json", file, 0644)
 
 	// println("history.json saved successfully!")
-	return
-
 }
 
 func readHistory() History {
