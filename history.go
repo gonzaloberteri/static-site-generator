@@ -2,7 +2,6 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
 	"io/ioutil"
 )
 
@@ -25,7 +24,7 @@ func createHistory(update History) {
 
 	_ = ioutil.WriteFile("history.json", file, 0644)
 
-	println("history.json saved successfully!")
+	// println("history.json saved successfully!")
 	return
 
 }
@@ -39,13 +38,13 @@ func readHistory() History {
 	jsonErr := json.Unmarshal(content, &history)
 	errorCheck(jsonErr)
 
-	fmt.Println("history:", history.Done)
+	// fmt.Println("history:", history.Done)
 
 	return history
 }
 
 func updateHistory() {
-	println("Updating history.")
+	// println("Updating history.")
 	history := readHistory()
 	templates := getTemplates(false)
 

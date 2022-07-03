@@ -2,10 +2,11 @@ package main
 
 import (
 	"bytes"
-	"fmt"
 	"html/template"
 	"io/fs"
+	"log"
 	"os"
+	"os/exec"
 	"path/filepath"
 	"strings"
 	"time"
@@ -21,7 +22,7 @@ func getTemplates(delta bool) []string {
 		rendered := readHistory()
 		difference := difference(templates, rendered.Done)
 
-		fmt.Println(templates, rendered.Done, difference)
+		// fmt.Println(templates, rendered.Done, difference)
 
 		return difference
 	}
@@ -53,7 +54,7 @@ func readFile(path string) []byte {
 
 func renderTemplate(path string) {
 	println("Rending template: ", path)
-	fileName := strings.Replace(path, "src/", "", 1)
+	fileName := strings.Split(path, "/")[1]
 	// srcContent := readFile(path)
 	distContent := new(bytes.Buffer)
 
@@ -73,6 +74,47 @@ func renderTemplate(path string) {
 	//fmt.Println(distContent)
 	errorCheck(templateErr)
 
-	fileErr := os.WriteFile("./dist/"+fileName, distContent.Bytes(), 0644)
+	os.MkdirAll("./dist/"+fileName, os.ModePerm)
+
+	fileErr := os.WriteFile("./dist/"+fileName+"/index.html", distContent.Bytes(), 0644)
 	errorCheck(fileErr)
+}
+
+func compileTypescript(path string) {
+	// fileName := strings.Replace(path, "src/", "", 1)
+	fileName := strings.Split(path, "/")[1]
+
+	command := "npx swc src/" + fileName + "/ts/*.ts -o dist/" + fileName + "/js/index.js"
+	parts := strings.Fields(command)
+	println("Compiling Typescript: ", "src/"+fileName+"/ts/*.ts")
+
+	out, err := exec.Command(parts[0], parts[1:]...).Output()
+
+	if false {
+		println("output: " + string(out))
+	}
+
+	if err != nil {
+		log.Fatal(err)
+	}
+}
+
+func minifyCSS(path string) {
+	// fileName := strings.Replace(path, "src/", "", 1)
+	fileName := strings.Split(path, "/")[1]
+
+	command := "npx postcss src/" + fileName + "/css/style.css -o dist/" + fileName + "/css/style.css"
+	parts := strings.Fields(command)
+	println("Minifying CSS: ", "src/"+fileName+"/css/style.css")
+
+	out, err := exec.Command(parts[0], parts[1:]...).Output()
+
+	if false {
+		println("output: " + string(out))
+	}
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
 }
