@@ -13,9 +13,9 @@ func main() {
 
 	// Render templates
 	for i := 0; i < len(pages); i++ {
-		println("--" + strings.Split(pages[i], "/")[1] + "-----------------------------")
-		go renderTemplate(pages[i])
-		go minifyCSS(pages[i])
+		println("/" + strings.Split(pages[i], "/")[1])
+		renderTemplate(pages[i])
+		minifyCSS(pages[i])
 		compileTypescript(pages[i])
 		println("")
 	}

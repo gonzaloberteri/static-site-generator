@@ -53,8 +53,10 @@ func readFile(path string) []byte {
 }
 
 func renderTemplate(path string) {
-	println("Rending template: ", path)
-	fileName := strings.Split(path, "/")[1]
+	writeColor("Rending template: ", "red")
+	parts := strings.Split(path, "/")
+	println(parts[2])
+	fileName := parts[1]
 	// srcContent := readFile(path)
 	distContent := new(bytes.Buffer)
 
@@ -82,13 +84,15 @@ func renderTemplate(path string) {
 
 func compileTypescript(path string) {
 	// fileName := strings.Replace(path, "src/", "", 1)
-	fileName := strings.Split(path, "/")[1]
+	parts := strings.Split(path, "/")
+	moduleName := parts[1]
 
-	command := "npx swc src/" + fileName + "/ts/*.ts -o dist/" + fileName + "/js/index.js"
-	parts := strings.Fields(command)
-	println("Compiling Typescript: ", "src/"+fileName+"/ts/*.ts")
+	command := "npx swc src/" + moduleName + "/ts/*.ts -o dist/" + moduleName + "/js/index.js"
+	commandParts := strings.Fields(command)
+	writeColor("Compiling Typescript: ", "blue")
+	println(moduleName + "/ts/*.ts")
 
-	out, err := exec.Command(parts[0], parts[1:]...).Output()
+	out, err := exec.Command(commandParts[0], commandParts[1:]...).Output()
 
 	if false {
 		println("output: " + string(out))
@@ -101,13 +105,15 @@ func compileTypescript(path string) {
 
 func minifyCSS(path string) {
 	// fileName := strings.Replace(path, "src/", "", 1)
-	fileName := strings.Split(path, "/")[1]
+	parts := strings.Split(path, "/")
+	moduleName := parts[1]
 
-	command := "npx postcss src/" + fileName + "/css/style.css -o dist/" + fileName + "/css/style.css"
-	parts := strings.Fields(command)
-	println("Minifying CSS: ", "src/"+fileName+"/css/style.css")
+	command := "npx postcss src/" + moduleName + "/css/style.css -o dist/" + moduleName + "/css/style.css"
+	commandParts := strings.Fields(command)
+	writeColor("Minifying CSS: ", "green")
+	println(moduleName + "/css/style.css")
 
-	out, err := exec.Command(parts[0], parts[1:]...).Output()
+	out, err := exec.Command(commandParts[0], commandParts[1:]...).Output()
 
 	if false {
 		println("output: " + string(out))
