@@ -5,16 +5,27 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script type="module" src="js/index.js"></script>
-    <link rel="stylesheet" href="css/style.css" />
-    <title>Document</title>
+    <link
+      rel="preload"
+      href="css/style.css"
+      as="style"
+      onload="this.onload=null;this.rel='stylesheet'"
+    />
+    <!-- <link
+      rel="stylesheet"
+      href="https://csswizardry.com/ct/ct.css"
+      class="ct"
+    /> -->
+    <title>SSG</title>
   </head>
   <body>
-    <h1>{{.Title}}</h1>
+    <h2 class="border">SSG</h2>
+    <h2 class="wave">SSG</h2>
 
+    <!-- <h1>{{.Title}}</h1>
     {{range $val := .Copies}}
     <p>Copy n° {{$val}}!</p>
     {{end}}
-
-    <span>{{ .CreatedOn.Format "2006 Jan 02" }}</span>
+    <span>{{ .CreatedOn.Format "2006 Jan 02" }}</span> -->
   </body>
 </html>
