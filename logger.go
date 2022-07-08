@@ -4,7 +4,7 @@ import (
 	"fmt"
 )
 
-func writeColor(str string, color string) {
+func writeColor(str string, color string, newline bool) {
 	colors := map[string]string{
 		"reset":  "\033[0m",
 		"red":    "\033[31m",
@@ -19,5 +19,11 @@ func writeColor(str string, color string) {
 	selectedColor := colors[color]
 
 	print(selectedColor)
-	fmt.Print(string(colors[selectedColor]), str, string(colors["reset"]))
+
+	if newline {
+		fmt.Println(string(colors[selectedColor]), str, string(colors["reset"]))
+	} else {
+		fmt.Print(string(colors[selectedColor]), str, string(colors["reset"]))
+	}
+
 }

@@ -1,9 +1,5 @@
 package main
 
-import (
-	"strings"
-)
-
 func main() {
 	// Find or create history.json
 	createHistory(History{})
@@ -11,13 +7,12 @@ func main() {
 	// Find files with .html extension
 	pages := getTemplates(true)
 
+	compileTypescript()
+	minifyCSS()
+
 	// Render templates
 	for i := 0; i < len(pages); i++ {
-		println("/" + strings.Split(pages[i], "/")[1])
-		renderTemplate(pages[i])
-		minifyCSS(pages[i])
-		compileTypescript(pages[i])
-		println("")
+		go renderTemplate(pages[i])
 	}
 
 	// Update history.json

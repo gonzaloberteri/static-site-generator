@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"html/template"
 	"io/fs"
-	"log"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -51,11 +50,11 @@ func readFile(path string) []byte {
 }
 
 func renderTemplate(path string) {
-	writeColor("Rending template: ", "red")
+	writeColor("Rending template: ", "red", false)
 	parts := strings.Split(path, "/")
-	println(parts[2])
+	moduleName := strings.Split(parts[2], ".")
+	println(moduleName[0])
 	fileName := parts[1]
-	// srcContent := readFile(path)
 	distContent := new(bytes.Buffer)
 
 	t, err := template.ParseFiles(path)
@@ -71,7 +70,6 @@ func renderTemplate(path string) {
 	post := &Post{Id: 19, Title: "Test", Copies: []int{1, 2, 3, 4, 5, 6, 7}}
 
 	templateErr := t.Execute(distContent, post)
-	//fmt.Println(distContent)
 	errorCheck(templateErr)
 
 	os.MkdirAll("./dist/"+fileName, os.ModePerm)
@@ -86,44 +84,10 @@ func renderTemplate(path string) {
 	errorCheck(fileErr)
 }
 
-func compileTypescript(path string) {
-	// fileName := strings.Replace(path, "src/", "", 1)
-	parts := strings.Split(path, "/")
-	moduleName := parts[1]
-
-	tsFiles := findFileByExtension("./src/"+moduleName, ".ts")
-
-	for index := range tsFiles {
-		filePath := tsFiles[index]
-		fileParts := strings.Split(filePath, "/")
-		fileName := strings.Split(fileParts[len(fileParts)-1], ".")[0]
-
-		command := "npx swc " + filePath + " -o dist/" + moduleName + "/js/" + fileName + ".js"
-		println(command)
-		commandParts := strings.Fields(command)
-		writeColor("Compiling Typescript: ", "blue")
-		println(moduleName + "/ts/index.ts")
-
-		out, err := exec.Command(commandParts[0], commandParts[1:]...).Output()
-
-		println("output: " + string(out))
-
-		if err != nil {
-			log.Fatal(err)
-		}
-
-	}
-}
-
-func minifyCSS(path string) {
-	// fileName := strings.Replace(path, "src/", "", 1)
-	parts := strings.Split(path, "/")
-	moduleName := parts[1]
-
-	command := "npx postcss src/" + moduleName + "/css/style.css -o dist/" + moduleName + "/css/style.css"
+func compileTypescript() {
+	command := "npx swc src -d dist -s"
 	commandParts := strings.Fields(command)
-	writeColor("Minifying CSS: ", "green")
-	println(moduleName + "/css/style.css")
+	writeColor("Compiling Typescript..", "blue", true)
 
 	out, err := exec.Command(commandParts[0], commandParts[1:]...).Output()
 
@@ -131,8 +95,20 @@ func minifyCSS(path string) {
 		println("output: " + string(out))
 	}
 
-	if err != nil {
-		log.Fatal(err)
+	errorCheck(err)
+}
+
+func minifyCSS() {
+	command := "npx postcss src/**/*.css --base src --dir dist"
+	commandParts := strings.Fields(command)
+	writeColor("Minifying CSS..", "green", true)
+
+	out, err := exec.Command(commandParts[0], commandParts[1:]...).Output()
+
+	if false {
+		println("output: " + string(out))
 	}
+
+	errorCheck(err)
 
 }
