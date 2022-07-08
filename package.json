@@ -1,11 +1,11 @@
 {
   "scripts": {
+    "watch": "concurrently --kill-others \"yarn:watch-ts\" \"yarn:watch-css\" \"yarn:serve\"",
+    "build": "yarn clean & go run *.go",
     "clean": "rm -rf dist/*",
-    "build": "go run *.go",
     "watch-ts": "swc src -d dist -s -w",
     "watch-css": "postcss src/**/*.css --base src --dir dist -w",
-    "serve": "http-server dist",
-    "watch": "concurrently --kill-others \"yarn:watch-ts\" \"yarn:watch-css\" \"yarn:serve\""
+    "serve": "http-server dist"
   },
   "devDependencies": {
     "@fullhuman/postcss-purgecss": "^4.1.3",
