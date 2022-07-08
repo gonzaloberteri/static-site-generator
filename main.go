@@ -12,7 +12,7 @@ func main() {
 
 	// Render templates
 	for i := 0; i < len(pages); i++ {
-		go renderTemplate(pages[i])
+		renderTemplate(pages[i])
 	}
 
 	// Update history.json
