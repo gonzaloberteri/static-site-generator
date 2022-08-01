@@ -12,10 +12,10 @@
     "@swc/cli": "^0.1.57",
     "@swc/core": "^1.2.208",
     "autoprefixer": "^10.4.7",
-    "chokidar": "^3.5.3",
     "concurrently": "^7.2.2",
     "cssnano": "^5.1.12",
-    "http-server": "^14.1.1"
+    "http-server": "^14.1.1",
+    "postcss-cli": "^10.0.0"
   },
   "license": "MIT"
 }
